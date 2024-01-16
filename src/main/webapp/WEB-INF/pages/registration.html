@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+</head>
+<body style="text-align: center" th:with="user=${session.currentUser}">
+<h1>Registration</h1>
+
+<nav th:insert="~{main::nav}"></nav>
+
+<main>
+    <form th:action="@{/user/reg}" method="post" th:object="${regUser}">
+        <p><input type="text" th:field="*{name}" placeholder="Name"></p>
+        <p><input type="text" th:field="*{phoneNumber}" placeholder="Phone"></p>
+        <p><input type="text" th:field="*{address}" placeholder="Address"></p>
+        <p><input type="text" th:field="*{email}" placeholder="Email"></p>
+        <p><input type="text" th:field="*{password}" placeholder="Password"></p>
+        <p><input type="submit" value="Register"></p>
+
+        <p style="color: red" th:each="error :${#fields.allErrors()}" th:text="${error}"></p>
+    </form>
+
+    <p th:if="${isExist}"> The email already exists. Enter another email</p>
+</main>
+
+</body>
+</html>

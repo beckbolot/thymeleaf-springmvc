@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Main Page</title>
+</head>
+<body style="text-align: center" th th:with="user=${session.currentUser}">
+<h1>Products catalogue</h1>
+
+<nav th:fragment="nav">
+  <a href="/">
+    <input type="submit" value="Home">
+  </a>
+  <a th:if="${user != null}" th:href="@{/basket}">
+    <input type="submit" value="Basket">
+  </a>
+  <a th:if="${user != null}" th:href="@{/comment}">
+    <input type="submit" value="Leave comment">
+  </a>
+  <a th:if="${user != null and user.isAdmin()}" th:href="@{/product}">
+    <input type="submit" value="Add product">
+  </a>
+  <a th:if="${user != null and (user.isAdmin() or user.isDispatcher())}" th:href="@{/finalOrder}">
+    <input type="submit" value="Orders">
+  </a>
+  <a th:if="${user == null}" th:href="@{/user/auth}">
+    <input type="submit" value="Login">
+  </a>
+  <a th:if="${user == null}" th:href="@{/user/reg}">
+    <input type="submit" value="Registration">
+  </a>
+  <a th:if="${user != null}" th:href="@{/user/out}">
+    <input type="submit" value="Logout">
+  </a>
+</nav>
+
+<div th:switch="${isAdded}">
+  <p th:case="0">Product is already in basket.</p>
+  <p th:case="1">Product was added to basket.</p>
+</div>
+
+<div th:switch="${isOrdered}">
+  <p th:case="0">You have already made order. Please wait for dispatcher call.</p>
+  <p th:case="1">Order is received. Please wait for dispatcher call.</p>
+</div>
+
+<p th:if="${filterIsEmpty}">The product is not available in store.</p>
+<p th:if="${user != null and user.isAdmin()}">Your status is: ADMIN</p>
+<p th:if="${user != null and user.isDispatcher()}">Your status is: DISPATCHER</p>
+
+<form th:action="@{/search}" method="post">
+  <p>
+    <input type="text" name="string" placeholder="Search for products">
+    <input type="submit" value="Search">
+  </p>
+</form>
+
+<main>
+  <table style="margin: auto" border="1">
+    <tr>
+      <th>Number</th>
+      <th><a th:href="@{/id}">ID</a></th>
+      <th><a th:href="@{/name}">Product Name</a></th>
+      <th><a th:href="@{/type}">Product Type </a></th>
+      <th>Description</th>
+      <th><a th:href="@{/price}">Price</a></th>
+    </tr>
+    <tr th:each="product , iter : ${productList}">
+      <td th:text="${iter.count}"></td>
+      <td th:text="${product.id}"></td>
+      <td th:text="${product.name}"></td>
+      <td th:text="${product.type.name}"></td>
+      <td th:text="${product.description}"></td>
+      <td th:text="${product.price} + ' $'"></td>
+      <td th:if="${user != null  and user.isAdmin()}">
+        <a th:href="@{/product/edit/{id}(id=${product.id})}"><input type="submit" value="Edit"></a>
+      </td>
+      <td th:if="${user != null and user.isAdmin()}">
+        <a th:href="@{/product/remove/{id}(id=${product.id})}"><input type="submit" value="Delete"></a>
+      </td>
+      <td th:if="${user != null}">
+        <a th:href="@{/basket/add/{id}(id=${product.id})}"><input type="submit" value="Add to basket"></a>
+      </td>
+    </tr>
+  </table>
+</main>
+
+</body>
+</html>

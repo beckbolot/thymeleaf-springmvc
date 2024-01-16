@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Basket</title>
+</head>
+<body style="text-align: center" th:with="user=${session.currentUser}">
+<h1>Your basket</h1>
+
+<nav th:insert="~{main::nav}"></nav>
+
+<p th:if="${productBasket.isEmpty()}">Basket Empty</p>
+
+<main style="padding-top: 10px" th:if="${!productBasket.isEmpty()}">
+    <table style="margin: auto" border="1">
+        <tr>
+            <th>ID</th>
+            <th>Product Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Price</th>
+        </tr>
+        <tr th:each="product, iter: ${productBasket}">
+            <td th:text="${product.id}"></td>
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.type.name()}"></td>
+            <td th:text="${product.description}"></td>
+            <td th:text="${product.price} + '$'" ></td>
+            <td><a th:href="@{/basket/remove/{id}(id=${product.id})}"><input type="submit" value="Remove"></a>
+            </td>
+        </tr>
+    </table>
+
+
+</main>
+
+</body>
+</html>

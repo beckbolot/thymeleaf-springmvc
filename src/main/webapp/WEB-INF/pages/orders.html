@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+</head>
+<body style="text-align: center" th:with="user=${session.currentUser}">
+<h1>Orders</h1>
+
+<nav th:insert="~{main::nav}"></nav>
+
+<p th:if="${finalOrderList.isEmpty()}"> No orders</p>
+
+<main>
+  <div th:each="finalOrder, iter : ${finalOrderList}">
+    <p th:text="${finalOrder.date}"></p>
+    <p th:text="'Name:' + ${finalOrder.user.name}"></p>
+    <p th:text="'Address:' + ${finalOrder.user.address}"></p>
+    <p th:text="'Phone:' + ${finalOrder.user.phoneNumber}"></p>
+    <p th:text="'Email:' + ${finalOrder.user.email}"></p>
+      <p>Product list</p>
+      <div th:each="product: ${finalOrder.products}">
+          <p th:text="'ID: ' + ${product.id} + '; Name: ' + ${product.name} + '; Price: ' + ${product.price}"></p>
+      </div>
+
+      <a th:href="@{/finalOrder/remove/{id}(id=${finalOrder.id})}"><input type="submit" value="Remove order"></a>
+
+  </div>
+</main>
+
+</body>
+</html>

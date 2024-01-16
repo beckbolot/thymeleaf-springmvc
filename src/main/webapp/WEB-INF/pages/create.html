@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Creating product</title>
+</head>
+<body style="text-align: center" th:with="user=${session.currentUser}">
+<h1>Adding products</h1>
+
+<nav th:insert="~{main::nav}"></nav>
+
+<main>
+    <form action="#" th:action="@{/product/create}" th:object="${product}" method="post">
+        <p><input type="text" th:field="*{name}" placeholder="Name"></p>
+        <p style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+        <span th:each="type : ${types}">
+        <label th:for="${#ids.next('type')}" th:text="${type.name}"></label>
+        <input type="radio" th:value="${type}" th:field="*{type}"/>
+    </span>
+        <p style="color: red" th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></p>
+        <p><input type="text" th:field="*{description}" placeholder="Description"/></p>
+        <p><input type="number" th:field="*{price}" placeholder="Price"/></p>
+        <p style="color: red" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
+
+        <input type="submit" value="Add product to Basket"/>
+    </form>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Product</title>
+</head>
+<body style="text-align: center" th:with="user=${session.currentUser}">
+<h1>Editing product</h1>
+
+<nav th:insert="~{main::nav}"></nav>
+
+<main>
+  <form action="#" th:action="@{/product/edit}" th:object="${product}" method="post">
+    <input type="hidden" th:field="*{id}" th:value="*{id}"/>
+    <p><input type="text" th:field="*{name}" th:value="*{name}"/></p>
+    <p>
+      Computer<input type="radio" th:field="*{type}" th:value="${T(com.beck.entity.ProductTypeEnum).PC}"/>
+      NoteBook<input type="radio" th:field="*{type}" th:value="${T(com.beck.entity.ProductTypeEnum).LAPTOP}"/>
+      SmartPhone<input type="radio" th:field="*{type}" th:value="${T(com.beck.entity.ProductTypeEnum).PHONE}"/>
+      Tablet<input type="radio" th:field="*{type}" th:value="${T(com.beck.entity.ProductTypeEnum).TABLET}"/>
+    </p>
+    <p><input type="text" th:field="*{description}" th:value="*{description}"/></p>
+    <p><input type="number" th:field="*{price}" th:value="*{price}"/></p>
+
+    <p><input type="submit" value="Edit product"/></p>
+
+    <div th:if="${#fields.hasAnyErrors()}">
+      <p style="color: red" th:each="error : ${#fields.allErrors()}" th:text="${error}"></p>
+
+    </div>
+
+  </form>
+</main>
+
+</body>
+</html>

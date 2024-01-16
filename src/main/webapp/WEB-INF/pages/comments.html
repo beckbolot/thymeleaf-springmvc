@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Comments</title>
+</head>
+<body style="text-align: center" th:with="user=${session.currentUser}">
+<h1>Comments</h1>
+
+<nav th:insert="~{main::nav}"></nav>
+
+<form th:action="@{/comment}" th:object="${comment}" method="post">
+    <p>
+        <input type="text" th:field="*{text}" placeholder="Your comment">
+        <input type="submit" value="Leave comment">
+    </p>
+    <p style="color: red" th:if="${#fields.hasErrors('text')}" th:errors="*{text}"></p>
+</form>
+
+<p th:if="${commentsList.isEmpty()}">No Comments</p>
+
+<main th:if="${!commentsList.isEmpty()}">
+    <div th:each="comment : ${commentsList}">
+        <p th:text="${comment}"></p>
+    </div>
+</main>
+
+</body>
+</html>
